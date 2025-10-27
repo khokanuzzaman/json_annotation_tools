@@ -32,8 +32,6 @@ class SafeJsonParsingGenerator extends GeneratorForAnnotation<SafeJsonParsing> {
     final nullSafety = annotation.read('nullSafety').boolValue;
     final validateRequiredKeys = annotation.read('validateRequiredKeys').boolValue;
     final methodName = annotation.read('methodName').stringValue;
-    // Note: generateBothMethods is not used in current implementation but reserved for future use
-    // final generateBothMethods = annotation.read('generateBothMethods').boolValue;
 
     // Get constructor parameters
     final defaultConstructors = classElement.constructors
@@ -51,6 +49,8 @@ class SafeJsonParsingGenerator extends GeneratorForAnnotation<SafeJsonParsing> {
     final buffer = StringBuffer();
     
     // Generate the safe parsing method
+    buffer.writeln('// Enhanced JSON parsing extension for $className');
+    buffer.writeln('extension ${className}SafeJsonParsing on $className {');
     buffer.writeln('  /// Enhanced JSON parsing with detailed error messages');
     buffer.writeln('  /// ');
     buffer.writeln('  /// This method provides crystal-clear error messages when JSON parsing fails,');
@@ -96,6 +96,7 @@ class SafeJsonParsingGenerator extends GeneratorForAnnotation<SafeJsonParsing> {
     
     buffer.writeln('    );');
     buffer.writeln('  }');
+    buffer.writeln('}');
 
     return buffer.toString();
   }
@@ -149,18 +150,21 @@ class SafeJsonParsingGenerator extends GeneratorForAnnotation<SafeJsonParsing> {
 
     // Handle lists
     if (paramType.isDartCoreList) {
-      final elementType = (paramType as InterfaceType).typeArguments.first;
-      final elementTypeName = elementType.getDisplayString(withNullability: false);
-      final elementParser = _getTypeParser(elementTypeName);
-      
-      return isNullable && nullSafety
-          ? "json.getNullableSafeList('$jsonKey', $elementParser)"
-          : "json.getSafeList('$jsonKey', $elementParser)";
+      final typeArgs = (paramType as InterfaceType).typeArguments;
+      if (typeArgs.isNotEmpty) {
+        final elementType = typeArgs.first;
+        final elementTypeName = elementType.getDisplayString(withNullability: false);
+        final elementParser = _getTypeParser(elementTypeName);
+        
+        return isNullable && nullSafety
+            ? "json.getNullableSafeList('$jsonKey', $elementParser)"
+            : "json.getSafeList('$jsonKey', $elementParser)";
+      }
     }
 
     // Handle nested objects
     if (_isCustomClass(paramType)) {
-      final factoryMethod = '${typeName}.fromJsonSafe';
+      final factoryMethod = '$typeName.fromJsonSafe';
       return isNullable && nullSafety
           ? "json.getNullableSafeObject('$jsonKey', $factoryMethod)"
           : "json.getSafeObject('$jsonKey', $factoryMethod)";
@@ -209,16 +213,25 @@ class SafeJsonParsingGenerator extends GeneratorForAnnotation<SafeJsonParsing> {
   }
 
   String _getJsonKey(ParameterElement param) {
-    // Check for @JsonKey annotation
-    final jsonKeyAnnotations = param.metadata
-        .where((m) => m.element?.displayName == 'JsonKey')
-        .toList();
-    final jsonKeyAnnotation = jsonKeyAnnotations.isNotEmpty ? jsonKeyAnnotations.first : null;
+    // Check for @JsonKey annotation on the field (not parameter)
+    // Look for the field in the class that matches this parameter
+    final classElement = param.enclosingElement as ConstructorElement;
+    final fields = (classElement.enclosingElement as ClassElement).fields;
     
-    if (jsonKeyAnnotation != null) {
-      final reader = ConstantReader(jsonKeyAnnotation.computeConstantValue());
-      final name = reader.peek('name')?.stringValue;
-      if (name != null) return name;
+    for (final field in fields) {
+      if (field.name == param.name) {
+        final jsonKeyAnnotations = field.metadata
+            .where((m) => m.element?.displayName == 'JsonKey')
+            .toList();
+        final jsonKeyAnnotation = jsonKeyAnnotations.isNotEmpty ? jsonKeyAnnotations.first : null;
+        
+        if (jsonKeyAnnotation != null) {
+          final reader = ConstantReader(jsonKeyAnnotation.computeConstantValue());
+          final name = reader.peek('name')?.stringValue;
+          if (name != null) return name;
+        }
+        break;
+      }
     }
     
     // Default to parameter name
@@ -226,26 +239,36 @@ class SafeJsonParsingGenerator extends GeneratorForAnnotation<SafeJsonParsing> {
   }
 
   SafeJsonFieldAnnotation? _getSafeJsonFieldAnnotation(ParameterElement param) {
-    final annotations = param.metadata
-        .where((m) => m.element?.displayName == 'SafeJsonField')
-        .toList();
-    final annotation = annotations.isNotEmpty ? annotations.first : null;
+    // Check for @SafeJsonField annotation on the field (not parameter)
+    final classElement = param.enclosingElement as ConstructorElement;
+    final fields = (classElement.enclosingElement as ClassElement).fields;
     
-    if (annotation == null) return null;
+    for (final field in fields) {
+      if (field.name == param.name) {
+        final annotations = field.metadata
+            .where((m) => m.element?.displayName == 'SafeJsonField')
+            .toList();
+        final annotation = annotations.isNotEmpty ? annotations.first : null;
+        
+        if (annotation == null) return null;
+        
+        final reader = ConstantReader(annotation.computeConstantValue());
+        
+        return SafeJsonFieldAnnotation(
+          description: reader.peek('description')?.stringValue,
+          expectedFormat: reader.peek('expectedFormat')?.stringValue,
+          commonValues: reader.peek('commonValues')?.listValue
+              .map((e) => e.toStringValue())
+              .where((e) => e != null)
+              .cast<String>()
+              .toList(),
+          customParser: reader.peek('customParser')?.stringValue,
+          enhancedErrors: reader.peek('enhancedErrors')?.boolValue ?? true,
+        );
+      }
+    }
     
-    final reader = ConstantReader(annotation.computeConstantValue());
-    
-    return SafeJsonFieldAnnotation(
-      description: reader.peek('description')?.stringValue,
-      expectedFormat: reader.peek('expectedFormat')?.stringValue,
-      commonValues: reader.peek('commonValues')?.listValue
-          ?.map((e) => e.toStringValue())
-          .where((e) => e != null)
-          .cast<String>()
-          .toList(),
-      customParser: reader.peek('customParser')?.stringValue,
-      enhancedErrors: reader.peek('enhancedErrors')?.boolValue ?? true,
-    );
+    return null;
   }
 }
 
@@ -268,5 +291,5 @@ class SafeJsonFieldAnnotation {
 
 /// Builder for the safe JSON parsing generator
 Builder safeJsonParsingBuilder(BuilderOptions options) {
-  return SharedPartBuilder([SafeJsonParsingGenerator()], 'safe_json_parsing');
+  return PartBuilder([SafeJsonParsingGenerator()], '.safe_json_parsing.g.dart');
 }

@@ -44,6 +44,12 @@ User.fromJsonSafe(json);
 - **⚡ Best Performance**: Generated code is as fast as hand-written safe parsing
 - **🔧 Highly Customizable**: Field-level annotations for enhanced error context
 
+### ⚡ **Manual Convenience Methods** 
+- **🎯 Clean Convenience Methods**: `json.getSafeInt()`, `getSafeString()`, `getSafeBool()` and more!
+- **🚀 No More Manual Parsers**: Gone are the days of `(v) => v as int` everywhere
+- **⚡ Best Performance**: Same speed as manual parsing, but way cleaner code
+- **🔧 Comprehensive Coverage**: 12+ convenience methods for all common types
+
 ### 📊 **Crystal-Clear Error Messages**
 - **🔍 Pinpoint Error Location**: Know exactly which JSON field caused the parsing error
 - **📝 Detailed Error Messages**: See the expected type, actual type, and problematic value
@@ -80,7 +86,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  json_annotation_tools: ^0.0.1
+  json_annotation_tools: ^0.1.0
   json_annotation: ^4.9.0
 ```
 
@@ -88,7 +94,7 @@ dependencies:
 
 ### 🚀 **NEW: Zero-Hassle Code Generation** (Recommended)
 
-Just add **one annotation** and get automatic safe parsing!
+Just add **one annotation** and get automatic safe parsing! ✨
 
 ```dart
 import 'package:json_annotation_tools/json_annotation_tools.dart';
@@ -108,7 +114,7 @@ class User {
   Map<String, dynamic> toJson() => _$UserToJson(this);
   
   // 🚀 AUTO-GENERATED: Enhanced parsing with detailed errors
-  // factory User.fromJsonSafe(Map<String, dynamic> json) => _$UserFromJsonSafe(json);
+  // Available as: UserSafeJsonParsing.fromJsonSafe(json)
 }
 ```
 
@@ -121,12 +127,55 @@ class User {
 dart run build_runner build
 
 # Use the enhanced parsing
-final user = User.fromJsonSafe(json); // Crystal-clear errors automatically!
+final user = UserSafeJsonParsing.fromJsonSafe(json); // Crystal-clear errors automatically!
 ```
 
-### 🔧 **Alternative: Manual Extensions** (For custom control)
+### ⚡ **Alternative: Manual Convenience Extensions**
 
-If you prefer manual control or can't use code generation:
+Transform your JSON parsing from hassle to happiness with super clean convenience methods:
+
+```dart
+import 'package:json_annotation_tools/json_annotation_tools.dart';
+
+@JsonSerializable()
+class User {
+  final int id;
+  final String name;
+  final int age;
+  final String? email;
+  
+  User({required this.id, required this.name, required this.age, this.email});
+  
+  // Standard json_serializable methods (unchanged)
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
+  
+  // 🚀 ENHANCED: Safe parsing with crystal-clear error messages
+  factory User.fromJsonSafe(Map<String, dynamic> json) {
+    return User(
+      id: json.getSafeInt('id'),           // Clean convenience methods!
+      name: json.getSafeString('name'),     // No more manual parsers!
+      age: json.getSafeInt('age'),         // Automatic type conversion!
+      email: json.getNullableSafeString('email'), // Nullable support!
+    );
+  }
+}
+```
+
+**Before vs After:**
+```dart
+// 😤 OLD WAY (Manual hassle):
+id: json.getSafe('id', (v) => v as int),
+name: json.getSafe('name', (v) => v as String),
+
+// 🚀 NEW WAY (Clean convenience):
+id: json.getSafeInt('id'),      // So much cleaner!
+name: json.getSafeString('name'), // Zero hassle!
+```
+
+### 🔧 **Alternative: Custom Parsers** (For advanced control)
+
+If you need maximum control with custom parsing logic:
 
 ```dart
 import 'package:json_annotation_tools/json_annotation_tools.dart';
@@ -275,6 +324,32 @@ factory User.fromJsonSafe(Map<String, dynamic> json) {
 ## 🔗 Works Great With Your Stack
 
 Perfect integration with Dio, Retrofit, and json_annotation - use the same safe parsing methods with your existing API client setup.
+
+## 🎮 Usage Examples
+
+### Code Generation Example
+```dart
+@JsonSerializable()
+@SafeJsonParsing(
+  validateRequiredKeys: true,  // Validate all keys exist first
+  methodName: 'parseJsonSafe'  // Custom method name
+)
+class Product {
+  @SafeJsonField(
+    description: 'Product price in USD',
+    expectedFormat: 'Positive number (e.g., 19.99)',
+    commonValues: ['9.99', '19.99', '29.99'],
+  )
+  final double price;
+  
+  @JsonKey(name: 'is_available')
+  final bool isAvailable;
+  
+  // Constructor and standard methods...
+  
+  // 🚀 AUTO-GENERATED: Product.parseJsonSafe(json) with enhanced errors!
+}
+```
 
 ## 🤝 Migration Guide
 

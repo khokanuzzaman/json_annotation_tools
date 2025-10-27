@@ -19,6 +19,6 @@
 /// dart run build_runner build
 /// ```
 
-library json_annotation_tools.generator;
+library;
 
 export 'src/generator.dart';

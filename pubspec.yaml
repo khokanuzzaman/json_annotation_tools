@@ -16,7 +16,6 @@ dependencies:
   meta: ^1.11.0
   # Code generation dependencies
   build: ^2.4.1
-  build_config: ^1.1.1
   source_gen: ^1.5.0
   analyzer: ^6.4.1
 
@@ -24,9 +23,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
-  build_runner: ^2.4.9
-  json_serializable: ^6.8.0
-  test: ^1.25.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
