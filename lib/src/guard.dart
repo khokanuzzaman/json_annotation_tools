@@ -247,41 +247,39 @@ class JsonFieldGuard {
   /// Get simple, beginner-friendly type names
   static String _getSimpleTypeName<T>([Type? type]) {
     final targetType = type ?? T;
-    switch (targetType) {
-      case int:
-        return "a whole number (like 42)";
-      case double:
-        return "a decimal number (like 3.14)";
-      case String:
-        return "text (like 'hello')";
-      case bool:
-        return "true or false";
-      case DateTime:
-        return "a date/time";
-      case List:
-        return "a list of items";
-      default:
-        return targetType.toString();
+    if (targetType == int) {
+      return "a whole number (like 42)";
+    } else if (targetType == double) {
+      return "a decimal number (like 3.14)";
+    } else if (targetType == String) {
+      return "text (like 'hello')";
+    } else if (targetType == bool) {
+      return "true or false";
+    } else if (targetType == DateTime) {
+      return "a date/time";
+    } else if (targetType == List) {
+      return "a list of items";
+    } else {
+      return targetType.toString();
     }
   }
 
   /// Get explanation of what the type means
   static String _getTypeExplanation<T>() {
-    switch (T) {
-      case int:
-        return "a whole number (no decimal points)";
-      case double:
-        return "a number that can have decimal points";
-      case String:
-        return "text wrapped in quotes";
-      case bool:
-        return "either true or false";
-      case DateTime:
-        return "a date and time";
-      case List:
-        return "a list (array) of items";
-      default:
-        return "a ${T.toString()}";
+    if (T == int) {
+      return "a whole number (no decimal points)";
+    } else if (T == double) {
+      return "a number that can have decimal points";
+    } else if (T == String) {
+      return "text wrapped in quotes";
+    } else if (T == bool) {
+      return "either true or false";
+    } else if (T == DateTime) {
+      return "a date and time";
+    } else if (T == List) {
+      return "a list (array) of items";
+    } else {
+      return "a ${T.toString()}";
     }
   }
 
