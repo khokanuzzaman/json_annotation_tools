@@ -1,6 +1,6 @@
 import 'guard.dart';
 
-/// Powerful extension methods for Map<String, dynamic> that make JSON parsing
+/// Powerful extension methods for `Map<String, dynamic>` that make JSON parsing
 /// safer, more robust, and provide crystal-clear error messages when things go wrong.
 /// 
 /// These extensions transform cryptic JSON parsing errors into helpful,
@@ -734,8 +734,12 @@ extension SafeJsonExtension on Map<String, dynamic> {
       (i) => List.filled(s2.length + 1, 0),
     );
 
-    for (int i = 0; i <= s1.length; i++) matrix[i][0] = i;
-    for (int j = 0; j <= s2.length; j++) matrix[0][j] = j;
+    for (int i = 0; i <= s1.length; i++) {
+      matrix[i][0] = i;
+    }
+    for (int j = 0; j <= s2.length; j++) {
+      matrix[0][j] = j;
+    }
 
     for (int i = 1; i <= s1.length; i++) {
       for (int j = 1; j <= s2.length; j++) {

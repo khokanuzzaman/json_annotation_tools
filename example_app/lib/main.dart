@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:json_annotation_tools/json_annotation_tools.dart';
-import 'dart:convert';
 
 void main() {
   runApp(const MyApp());
