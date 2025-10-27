@@ -1,0 +1,11 @@
+name: json_annotation_tools_example
+description: A simple example demonstrating safe JSON parsing with enhanced error messages.
+version: 1.0.0
+publish_to: 'none'
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  json_annotation_tools:
+    path: ../
