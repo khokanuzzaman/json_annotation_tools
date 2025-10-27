@@ -1,0 +1,10 @@
+# Build configuration for json_annotation_tools code generation in example app
+# This enables the @SafeJsonParsing annotation generator
+
+targets:
+  $default:
+    builders:
+      json_annotation_tools|safe_json_parsing:
+        enabled: true
+      json_serializable|json_serializable:
+        enabled: true

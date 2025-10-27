@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2024-10-27
+
+### 🚀 **Interactive Code Generation Demo**
+- **✨ NEW**: 6th demo page in example app showcasing @SafeJsonParsing() in action
+- **🎯 INTERACTIVE**: Live "Try It Live!" buttons to test generated methods
+- **📱 VISUAL**: Before/after comparison of manual vs automatic code generation
+- **🏗️ COMPLETE**: Full build setup with build_runner, json_serializable integration
+
+### 🔧 **Code Generation Improvements**
+- **Fixed**: Nullable object handling in generator (User?.fromJsonSafe → proper lambda)
+- **Enhanced**: Complex nested object parsing with proper type safety
+- **Improved**: Generated code quality and error handling
+- **Added**: Support for custom method names and validation options
+
+### 📚 **Enhanced Documentation**
+- **NEW**: PRODUCTION_SETUP.md with real-world usage guide
+- **Added**: Step-by-step production integration instructions
+- **Included**: API service examples with error handling strategies
+- **Enhanced**: Performance impact documentation and security notes
+
+### 🎨 **Example App Features**
+- **NEW**: Auto-generated User, Product, and ApiResponse models
+- **NEW**: Field-level @SafeJsonField() annotations demonstration
+- **NEW**: Interactive error message testing with success/failure scenarios
+- **Enhanced**: Visual code examples showing annotation usage
+
+### 🛠️ **Developer Experience**
+- **Improved**: Generator handles nullable types correctly
+- **Added**: Production-ready error handling patterns
+- **Enhanced**: Integration with Dio, Retrofit, and common Flutter patterns
+- **Fixed**: Build configuration and dependency management
+
 ## [0.1.1] - 2024-10-27
 
 ### 🎯 **Perfect pub.dev Score Achievement**

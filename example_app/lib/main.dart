@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:json_annotation_tools/json_annotation_tools.dart';
+import 'models/api_models.dart';
 
 void main() {
   runApp(const MyApp());
@@ -59,6 +60,11 @@ class _JsonToolsDemoState extends State<JsonToolsDemo> {
       subtitle: 'Validation and structure analysis',
       color: Colors.purple.shade100,
     ),
+    DemoPage(
+      title: '🚀 Code Generation',
+      subtitle: '@SafeJsonParsing() in action!',
+      color: Colors.cyan.shade100,
+    ),
   ];
 
   @override
@@ -107,6 +113,7 @@ class _JsonToolsDemoState extends State<JsonToolsDemo> {
                 _buildRealWorldApiDemo(),
                 _buildConvenienceMethodsDemo(),
                 _buildAdvancedFeaturesDemo(),
+                _buildCodeGenerationDemo(),
               ],
             ),
           ),
@@ -699,6 +706,399 @@ final posts = json.getSafeObjectList('posts', Post.fromJson);'''),
         );
       },
     );
+  }
+
+  // 🚀 NEW: Code Generation Demo Page!
+  Widget _buildCodeGenerationDemo() {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.cyan.shade50, Colors.blue.shade50],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              '🚀 Revolutionary Code Generation',
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF2E7D32),
+              ),
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              'Zero-hassle @SafeJsonParsing() annotation magic!',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+            const SizedBox(height: 24),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildCodeGenerationCard(
+                      '🪄 Auto-Generated Methods',
+                      'Just add @SafeJsonParsing() and get enhanced error messages automatically!',
+                      '''// Before: Manual getSafe() calls everywhere 😤
+factory User.fromJson(Map<String, dynamic> json) {
+  return User(
+    id: json.getSafeInt('id'),
+    name: json.getSafeString('name'), 
+    email: json.getSafeString('email'),
+    // ... 10 more fields 😫
+  );
+}
+
+// After: One annotation, zero hassle! 🎉
+@SafeJsonParsing()
+class User {
+  // Just your regular model class!
+}
+
+// Auto-generated: UserSafeJsonParsing.fromJsonSafe() ✨''',
+                      () => _testCodeGenerationUser(),
+                    ),
+                    const SizedBox(height: 16),
+                    _buildCodeGenerationCard(
+                      '🎯 Enhanced Field Annotations',
+                      'Use @SafeJsonField() for custom error messages with descriptions!',
+                      '''@SafeJsonField(
+  description: 'Product price in USD',
+  expectedFormat: 'Positive number (e.g., 19.99)',
+  commonValues: ['9.99', '19.99', '99.99'],
+)
+final double price;
+
+// Auto-generates with field-specific help! 🔥''',
+                      () => _testCodeGenerationProduct(),
+                    ),
+                    const SizedBox(height: 16),
+                    _buildCodeGenerationCard(
+                      '⚡ Custom Method Names',
+                      'Choose your own method names and validation options!',
+                      '''@SafeJsonParsing(
+  methodName: 'parseJsonSafe',
+  validateRequiredKeys: true,
+  nullSafety: true,
+)
+class Product {
+  // Generates: ProductSafeJsonParsing.parseJsonSafe()
+}''',
+                      () => _testCodeGenerationCustom(),
+                    ),
+                    const SizedBox(height: 24),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade50,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.green.shade200),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.rocket_launch, color: Colors.green.shade600),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Ready to use in your project?',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green.shade600,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          const Text(
+                            '1. Add to pubspec.yaml:\n'
+                            '   json_annotation_tools: ^0.1.1\n\n'
+                            '2. Add annotations to your models:\n'
+                            '   @SafeJsonParsing()\n\n'
+                            '3. Run code generation:\n'
+                            '   dart run build_runner build\n\n'
+                            '4. Use the generated methods:\n'
+                            '   User.fromJsonSafe(json)',
+                            style: TextStyle(fontSize: 14, height: 1.4),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCodeGenerationCard(String title, String subtitle, String code, VoidCallback onTest) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF1976D2),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            subtitle,
+            style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+          ),
+          const SizedBox(height: 12),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              code,
+              style: const TextStyle(
+                fontFamily: 'monospace',
+                fontSize: 12,
+                height: 1.4,
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: onTest,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.cyan.shade600,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('🔥 Try It Live!'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Test methods for code generation demos
+  void _testCodeGenerationUser() {
+    final validJson = {
+      'id': 123,
+      'name': 'Jane Developer',
+      'email': 'jane@flutter.dev',
+      'age': 28,
+      'isActive': true,
+      'createdAt': '2024-01-15T10:30:00Z',
+      'tags': ['flutter', 'dart', 'mobile'],
+    };
+
+    final invalidJson = {
+      'id': '123',  // Wrong type: String instead of int
+      'name': 'Jane Developer',
+      'email': 'jane@flutter.dev',
+      'age': 28,
+      'isActive': true,
+      'createdAt': '2024-01-15T10:30:00Z',
+      'tags': ['flutter', 'dart', 'mobile'],
+    };
+
+    _showCodeGenerationDemo(
+      title: '🚀 Auto-Generated User.fromJsonSafe()',
+      validJson: validJson,
+      invalidJson: invalidJson,
+      parser: (json) => UserSafeJsonParsing.fromJsonSafe(json),
+      description: 'This method was automatically generated by @SafeJsonParsing()!\n\n'
+          '✨ Zero manual work required\n'
+          '🔥 Enhanced error messages included\n'
+          '⚡ Same performance as hand-written code\n'
+          '💎 Works with any number of fields',
+    );
+  }
+
+  void _testCodeGenerationProduct() {
+    final validJson = {
+      'id': 'prod-123',
+      'name': 'Flutter Pro Course',
+      'price': 99.99,
+      'is_available': true,
+      'categories': ['education', 'mobile', 'development'],
+    };
+
+    final invalidJson = {
+      'id': 'prod-123',
+      'name': 'Flutter Pro Course',
+      'price': 'ninety-nine dollars',  // Wrong type: String instead of double
+      'is_available': true,
+      'categories': ['education', 'mobile', 'development'],
+    };
+
+    _showCodeGenerationDemo(
+      title: '🎯 Enhanced Product.parseJsonSafe()',
+      validJson: validJson,
+      invalidJson: invalidJson,
+      parser: (json) => ProductSafeJsonParsing.parseJsonSafe(json),
+      description: 'This method uses @SafeJsonField() for enhanced error messages!\n\n'
+          '📝 Custom descriptions for each field\n'
+          '💡 Expected format examples\n'
+          '🎯 Common valid values suggestions\n'
+          '🔍 Required keys validation enabled',
+    );
+  }
+
+  void _testCodeGenerationCustom() {
+    final customJson = {
+      'success': true,
+      'message': 'Data loaded successfully',
+      'user': {
+        'id': 456,
+        'name': 'Code Generator',
+        'email': 'generator@example.com',
+        'age': null,
+        'isActive': true,
+        'createdAt': '2024-01-15T10:30:00Z',
+        'tags': ['automation', 'code-gen'],
+      },
+      'products': [],
+      'metadata': {
+        'version': '1.0',
+        'generated_at': '2024-01-15T10:30:00Z',
+      },
+    };
+
+    _showCodeGenerationDemo(
+      title: '⚡ Nested ApiResponse.fromJsonSafe()',
+      validJson: customJson,
+      invalidJson: {'success': 'maybe'},  // Invalid boolean
+      parser: (json) => ApiResponseSafeJsonParsing.fromJsonSafe(json),
+      description: 'Complex nested object parsing with null safety!\n\n'
+          '🏗️ Handles nested User objects automatically\n'
+          '📋 Parses arrays of Products\n'
+          '🛡️ Null safety for optional fields\n'
+          '🔧 Custom metadata handling',
+    );
+  }
+
+  void _showCodeGenerationDemo({
+    required String title,
+    required Map<String, dynamic> validJson,
+    required Map<String, dynamic> invalidJson,
+    required Function(Map<String, dynamic>) parser,
+    required String description,
+  }) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(title),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(description),
+                  const SizedBox(height: 16),
+                  const Text(
+                    '✅ Valid JSON (Success):',
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                  ),
+                  const SizedBox(height: 8),
+                  _buildSuccessResult(validJson, parser),
+                  const SizedBox(height: 16),
+                  const Text(
+                    '❌ Invalid JSON (Enhanced Error):',
+                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                  ),
+                  const SizedBox(height: 8),
+                  _buildErrorResult(invalidJson, parser),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildSuccessResult(Map<String, dynamic> json, Function(Map<String, dynamic>) parser) {
+    try {
+      final result = parser(json);
+      return Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.green.shade50,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          '🎉 SUCCESS!\n\n$result',
+          style: const TextStyle(fontSize: 12, fontFamily: 'monospace'),
+        ),
+      );
+    } catch (e) {
+      return Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.red.shade50,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          '❌ Unexpected error: $e',
+          style: const TextStyle(fontSize: 12),
+        ),
+      );
+    }
+  }
+
+  Widget _buildErrorResult(Map<String, dynamic> json, Function(Map<String, dynamic>) parser) {
+    try {
+      parser(json);
+      return const Text('No error occurred (unexpected)');
+    } catch (e) {
+      return Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.red.shade50,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Text(
+          e.toString(),
+          style: const TextStyle(fontSize: 11, fontFamily: 'monospace'),
+        ),
+      );
+    }
   }
 }
 

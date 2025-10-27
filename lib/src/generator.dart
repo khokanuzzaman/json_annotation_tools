@@ -154,7 +154,10 @@ class SafeJsonParsingGenerator extends GeneratorForAnnotation<SafeJsonParsing> {
 
     // Handle nested objects
     if (_isCustomClass(paramType)) {
-      final factoryMethod = '$typeName.fromJsonSafe';
+      final baseTypeName = typeName.replaceAll('?', '');
+      final factoryMethod = isNullable && nullSafety
+          ? "(json) => ${baseTypeName}SafeJsonParsing.fromJsonSafe(json as Map<String, dynamic>)"
+          : "$baseTypeName.fromJsonSafe";
       return isNullable && nullSafety
           ? "json.getNullableSafeObject('$jsonKey', $factoryMethod)"
           : "json.getSafeObject('$jsonKey', $factoryMethod)";
