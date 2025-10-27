@@ -5,6 +5,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.0] - 2024-10-27
+
+### 🚀 **MAJOR FEATURE: Revolutionary Code Generation**
+- **✨ NEW**: `@SafeJsonParsing()` annotation for zero-hassle safe parsing
+- **🪄 AUTO-GENERATION**: Build runner creates optimized safe parsing methods automatically
+- **🔧 NO MORE MANUAL WORK**: Just add one annotation, get all benefits automatically
+- **⚡ BEST PERFORMANCE**: Generated code is as fast as hand-written implementations
+
+### 🎯 **Zero-Hassle Developer Experience**
+- **Before**: Manual `getSafe()` calls everywhere (hassle!)
+- **After**: One `@SafeJsonParsing()` annotation (magic!)
+- **✅ BACKWARD COMPATIBLE**: All existing code continues to work unchanged
+- **🔄 SEAMLESS INTEGRATION**: Works perfectly with `json_serializable` workflow
+
+### 🔧 **Code Generation Features**
+- **📦 NEW**: `@SafeJsonParsing()` class-level annotation
+- **🎨 NEW**: `@SafeJsonField()` field-level customization annotation  
+- **⚙️ NEW**: `SafeJsonParsingGenerator` for build_runner integration
+- **📋 NEW**: Comprehensive configuration options (null safety, validation, custom method names)
+- **🎯 NEW**: Enhanced error messages with field descriptions and expected formats
+
+### 📖 **Documentation & Examples**
+- **📚 NEW**: Complete code generation examples and setup guide
+- **🚀 UPDATED**: README with revolutionary approach prominently featured
+- **💡 NEW**: Before/after comparisons showing the improvement
+- **🔧 NEW**: Integration instructions for existing projects
+
+### 🏗️ **Build System Integration**
+- **📦 NEW**: `build.yaml` configuration for build_runner
+- **⚙️ NEW**: Generator entry point (`lib/generator.dart`)
+- **🔧 UPDATED**: `pubspec.yaml` with build dependencies
+- **🚀 NEW**: Auto-detection and generation of safe parsing methods
+
+### 🎉 **Developer Benefits**
+- **🪄 EFFORTLESS**: Zero manual work after adding annotation
+- **🚀 FAST**: Same performance as manual safe parsing
+- **🛡️ SAFE**: All existing safety features work automatically
+- **📈 SCALABLE**: Works with any number of model classes
+- **🔧 FLEXIBLE**: Highly customizable with field-level annotations
+
 ## [0.0.3] - 2024-10-27
 
 ### 🔧 **pub.dev Analysis Fixes**

@@ -3,3 +3,6 @@ export 'src/guard.dart';
 
 // Export for users of the package to extend Map with safe parsing methods
 export 'src/extensions.dart';
+
+// Export annotations for code generation
+export 'src/annotations.dart';

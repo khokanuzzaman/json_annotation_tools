@@ -1,0 +1,19 @@
+# Build configuration for json_annotation_tools code generation
+# This file configures the @SafeJsonParsing annotation generator
+
+targets:
+  $default:
+    builders:
+      json_annotation_tools|safe_json_parsing:
+        enabled: true
+        # Generate files alongside json_serializable
+        runs_before: ["json_serializable|json_serializable"]
+
+builders:
+  safe_json_parsing:
+    target: ":safe_json_parsing"
+    builder_factories: ["safeJsonParsingBuilder"]
+    build_extensions: {".dart": [".safe_json_parsing.dart"]}
+    auto_apply: dependents
+    build_to: source
+    applies_builders: ["source_gen|combining_builder"]
