@@ -5,7 +5,7 @@
 
 **Stop wrestling with cryptic JSON parsing errors!** This package provides powerful debugging tools and safe parsing utilities that make JSON deserialization errors crystal clear and easy to fix.
 
-![Error Comparison Demo](docs/images/screenshots/error_comparison.png)
+![Error Comparison Demo](doc/images/screenshots/error_comparison.png)
 *Before vs After: See how error messages transform from cryptic to crystal clear*
 
 ## 🎯 Why You Need This
@@ -33,7 +33,7 @@ User.fromJson(json);
 User.fromJsonSafe(json);
 ```
 
-![Complete Demo Flow](docs/images/gifs/demo_complete_flow.gif)
+![Complete Demo Flow](doc/images/gifs/demo_complete_flow.gif)
 *🎬 See the complete debugging experience in action*
 
 ## 🚀 Features
@@ -50,7 +50,7 @@ User.fromJsonSafe(json);
 Experience the power of enhanced error messages with our interactive demo app:
 
 <div align="center">
-  <img src="docs/images/screenshots/android_home.png" alt="Demo App Home" width="300"/>
+  <img src="doc/images/screenshots/android_home.png" alt="Demo App Home" width="300"/>
 </div>
 
 *Try all features live on Android, iOS, or Web!*
