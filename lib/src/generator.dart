@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:analyzer/dart/element/element.dart';
 import 'package:analyzer/dart/element/type.dart';
+import 'package:analyzer/dart/element/nullability_suffix.dart';
 import 'package:build/build.dart';
 import 'package:source_gen/source_gen.dart';
-import 'package:json_annotation/json_annotation.dart';
 import 'annotations.dart';
 
 /// Code generator for @SafeJsonParsing annotation
@@ -32,12 +32,14 @@ class SafeJsonParsingGenerator extends GeneratorForAnnotation<SafeJsonParsing> {
     final nullSafety = annotation.read('nullSafety').boolValue;
     final validateRequiredKeys = annotation.read('validateRequiredKeys').boolValue;
     final methodName = annotation.read('methodName').stringValue;
-    final generateBothMethods = annotation.read('generateBothMethods').boolValue;
+    // Note: generateBothMethods is not used in current implementation but reserved for future use
+    // final generateBothMethods = annotation.read('generateBothMethods').boolValue;
 
     // Get constructor parameters
-    final constructor = classElement.constructors
+    final defaultConstructors = classElement.constructors
         .where((c) => c.name.isEmpty)
-        .firstOrNull;
+        .toList();
+    final constructor = defaultConstructors.isNotEmpty ? defaultConstructors.first : null;
 
     if (constructor == null) {
       throw InvalidGenerationSourceError(
@@ -208,9 +210,10 @@ class SafeJsonParsingGenerator extends GeneratorForAnnotation<SafeJsonParsing> {
 
   String _getJsonKey(ParameterElement param) {
     // Check for @JsonKey annotation
-    final jsonKeyAnnotation = param.metadata
+    final jsonKeyAnnotations = param.metadata
         .where((m) => m.element?.displayName == 'JsonKey')
-        .firstOrNull;
+        .toList();
+    final jsonKeyAnnotation = jsonKeyAnnotations.isNotEmpty ? jsonKeyAnnotations.first : null;
     
     if (jsonKeyAnnotation != null) {
       final reader = ConstantReader(jsonKeyAnnotation.computeConstantValue());
@@ -223,9 +226,10 @@ class SafeJsonParsingGenerator extends GeneratorForAnnotation<SafeJsonParsing> {
   }
 
   SafeJsonFieldAnnotation? _getSafeJsonFieldAnnotation(ParameterElement param) {
-    final annotation = param.metadata
+    final annotations = param.metadata
         .where((m) => m.element?.displayName == 'SafeJsonField')
-        .firstOrNull;
+        .toList();
+    final annotation = annotations.isNotEmpty ? annotations.first : null;
     
     if (annotation == null) return null;
     
@@ -236,9 +240,9 @@ class SafeJsonParsingGenerator extends GeneratorForAnnotation<SafeJsonParsing> {
       expectedFormat: reader.peek('expectedFormat')?.stringValue,
       commonValues: reader.peek('commonValues')?.listValue
           ?.map((e) => e.toStringValue())
-          ?.where((e) => e != null)
-          ?.cast<String>()
-          ?.toList(),
+          .where((e) => e != null)
+          .cast<String>()
+          .toList(),
       customParser: reader.peek('customParser')?.stringValue,
       enhancedErrors: reader.peek('enhancedErrors')?.boolValue ?? true,
     );
