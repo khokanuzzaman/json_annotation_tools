@@ -273,13 +273,44 @@ class SafeJsonParsingGenerator extends GeneratorForAnnotation<SafeJsonParsing> {
 }
 
 /// Internal representation of SafeJsonField annotation data
+/// 
+/// This class holds the parsed configuration from @SafeJsonField annotations
+/// and is used internally by the code generator to create enhanced error messages.
 class SafeJsonFieldAnnotation {
+  /// Human-readable description of what this field represents
+  /// 
+  /// Used in error messages to provide context about the field's purpose.
+  /// Example: "User email address" or "Product price in USD"
   final String? description;
+  
+  /// Expected format or example value for this field
+  /// 
+  /// Shown in error messages to help developers understand the expected format.
+  /// Example: "user@example.com" or "Positive number (e.g., 19.99)"
   final String? expectedFormat;
+  
+  /// List of common/valid values for this field
+  /// 
+  /// Displayed in error messages as examples of acceptable values.
+  /// Example: ['9.99', '19.99', '29.99'] for a price field
   final List<String>? commonValues;
+  
+  /// Name of a custom static parser method to use for this field
+  /// 
+  /// References a static method that should handle parsing this specific field.
+  /// The method should have signature: `static T methodName(dynamic value)`
   final String? customParser;
+  
+  /// Whether this field should use enhanced error reporting
+  /// 
+  /// When true, generates detailed error messages with context and suggestions.
+  /// When false, uses standard error reporting. Defaults to true.
   final bool enhancedErrors;
 
+  /// Creates a new SafeJsonFieldAnnotation with the specified configuration
+  /// 
+  /// This constructor is used internally by the code generator to create
+  /// annotation instances from @SafeJsonField metadata.
   SafeJsonFieldAnnotation({
     this.description,
     this.expectedFormat,
