@@ -1,0 +1,8 @@
+# Build configuration for @SafeJsonParsing() code generation
+targets:
+  $default:
+    builders:
+      json_annotation_tools|safe_json_parsing:
+        enabled: true
+      json_serializable|json_serializable:
+        enabled: true
