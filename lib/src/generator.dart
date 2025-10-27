@@ -33,18 +33,7 @@ class SafeJsonParsingGenerator extends GeneratorForAnnotation<SafeJsonParsing> {
     final validateRequiredKeys = annotation.read('validateRequiredKeys').boolValue;
     final methodName = annotation.read('methodName').stringValue;
 
-    // Get constructor parameters
-    final defaultConstructors = classElement.constructors
-        .where((c) => c.name == null || c.name!.isEmpty)
-        .toList();
-    final constructor = defaultConstructors.isNotEmpty ? defaultConstructors.first : null;
-
-    if (constructor == null) {
-      throw InvalidGenerationSourceError(
-        'Class $className must have a default constructor',
-        element: classElement,
-      );
-    }
+    // Note: We use field-based generation, so no constructor validation needed
 
     final buffer = StringBuffer();
     
@@ -181,7 +170,10 @@ class SafeJsonParsingGenerator extends GeneratorForAnnotation<SafeJsonParsing> {
   String? _getConvenienceMethod(String typeName, bool isNullable) {
     final prefix = isNullable ? 'json.getNullableSafe' : 'json.getSafe';
     
-    switch (typeName) {
+    // Strip nullable suffix to get base type
+    final baseType = typeName.replaceAll('?', '');
+    
+    switch (baseType) {
       case 'String': return '${prefix}String';
       case 'int': return '${prefix}Int';
       case 'double': return '${prefix}Double';

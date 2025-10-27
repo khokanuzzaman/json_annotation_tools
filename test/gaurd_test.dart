@@ -129,8 +129,8 @@ void main() {
             (e) => e.message,
             'message',
             allOf([
-              contains('Field you asked for: \'age\''),
-              contains('But this JSON only has: name'),
+              contains('📍 Field your model expects: \'age\''),
+              contains('📄 JSON response contains: name'),
             ]),
           ),
         ),
@@ -145,7 +145,7 @@ void main() {
           isA<FormatException>().having(
             (e) => e.message,
             'message',
-            contains('Did you mean: user_name'),
+            contains('→ \'user_name\' (looks similar to \'username\')'),
           ),
         ),
       );
@@ -290,7 +290,7 @@ void main() {
           isA<FormatException>().having(
             (e) => e.message,
             'message',
-            contains('Missing required keys: age'),
+            contains('❌ Missing fields: age'),
           ),
         ),
       );
@@ -323,10 +323,10 @@ void main() {
             (e) => e.message,
             'message',
             allOf([
-              contains('Error parsing key \'age\''),
-              contains('Expected: int'),
-              contains('Got: String'),
-              contains('Value: 25'),
+              contains('📍 Field name: \'age\''),
+              contains('🎯 Your model expects: a whole number (like 42)'),
+              contains('😕 JSON response contains: text (like \'hello\')'),
+              contains('📄 The actual value: 25'),
             ]),
           ),
         ),
@@ -342,7 +342,7 @@ void main() {
           isA<FormatException>().having(
             (e) => e.message,
             'message',
-            contains('Cannot convert maybe'),
+            contains('🚨 OOPS! Can\'t convert \'maybe\' to true/false:'),
           ),
         ),
       );
