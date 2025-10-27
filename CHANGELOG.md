@@ -5,6 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.4] - 2024-10-27
+
+### 📚 **Crystal-Clear @SafeJsonParsing() Documentation**
+- **✨ NEW**: Step-by-step @SafeJsonParsing() guide in README.md
+- **🔍 ANSWERED**: "How do I see enhanced error messages?" - complete tutorial
+- **📋 STEP-BY-STEP**: Model annotation → build.yaml → code generation → usage
+- **🎯 CLEAR EXAMPLES**: Exact code showing enhanced error output in try-catch blocks
+
+### 🚀 **Enhanced Quick Start Guide**
+- **🏆 PRIMARY**: @SafeJsonParsing() code generation now featured as main approach
+- **⚡ ALTERNATIVE**: Manual extensions clearly marked as secondary option
+- **🔧 PRODUCTION**: Real API service patterns with enhanced error handling
+- **📱 INTERACTIVE**: Updated example app references and usage patterns
+
+### 💡 **Developer Experience Improvements**
+- **❓ FAQ SECTION**: "How to see enhanced error messages" directly addressed
+- **🏭 PRODUCTION PATTERNS**: API service examples with error logging
+- **🔧 ADVANCED CONFIG**: @SafeJsonField() with descriptions and common values
+- **📊 VISUAL OUTPUT**: Exact enhanced error message format shown in README
+
+### 📦 **Updated Installation Guide**
+- **🚀 LATEST VERSION**: Updated to v0.1.4 in installation instructions
+- **📋 COMPLETE DEPS**: Added build_runner and json_serializable to installation
+- **⚙️ BUILD CONFIG**: Clear build.yaml setup instructions included
+- **🎯 ONE-STOP SETUP**: Everything needed for @SafeJsonParsing() in one place
+
+### 🎨 **Documentation Polish**
+- **🔍 SEARCHABLE**: Key questions answered directly in README
+- **📝 COPY-PASTE**: Ready-to-use code examples throughout
+- **🚀 MODERN**: Focused on code generation as primary approach
+- **📱 MOBILE-READY**: Android example app running smoothly
+
 ## [0.1.3] - 2024-10-27
 
 ### 📁 **Perfect pub.dev Example**

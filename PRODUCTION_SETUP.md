@@ -7,7 +7,7 @@ Add to your `pubspec.yaml`:
 ```yaml
 dependencies:
   json_annotation: ^4.9.0
-  json_annotation_tools: ^0.1.3  # 🚀 Latest version!
+  json_annotation_tools: ^0.1.4  # 🚀 Latest version!
 
 dev_dependencies:
   build_runner: ^2.4.12

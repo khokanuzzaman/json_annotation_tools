@@ -86,18 +86,27 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  json_annotation_tools: ^0.1.0
+  json_annotation_tools: ^0.1.3  # 🚀 Latest version!
   json_annotation: ^4.9.0
+
+dev_dependencies:
+  build_runner: ^2.4.12  # For @SafeJsonParsing() code generation
+  json_serializable: ^6.8.0
 ```
 
 ## 🎮 Quick Start
 
-### 🚀 **NEW: Zero-Hassle Code Generation** (Recommended)
+### 🚀 **Zero-Hassle Code Generation** (Recommended)
 
-Just add **one annotation** and get automatic safe parsing! ✨
+Just add **one annotation** and get automatic safe parsing with enhanced error messages! ✨
 
+#### **Step 1: Annotate Your Model**
 ```dart
+import 'package:json_annotation/json_annotation.dart';
 import 'package:json_annotation_tools/json_annotation_tools.dart';
+
+part 'user.g.dart';
+part 'user.safe_json_parsing.g.dart';  // 🔥 This will be generated!
 
 @JsonSerializable()
 @SafeJsonParsing() // ← Magic happens with just this line!
@@ -113,22 +122,72 @@ class User {
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
   
-  // 🚀 AUTO-GENERATED: Enhanced parsing with detailed errors
-  // Available as: UserSafeJsonParsing.fromJsonSafe(json)
+  // 🚀 AUTO-GENERATED: UserSafeJsonParsing.fromJsonSafe(json) method with enhanced errors!
 }
 ```
 
-**Setup (one-time):**
-```bash
-# Add to pubspec.yaml dev_dependencies:
-# build_runner: ^2.4.9
-
-# Generate the safe parsing methods
-dart run build_runner build
-
-# Use the enhanced parsing
-final user = UserSafeJsonParsing.fromJsonSafe(json); // Crystal-clear errors automatically!
+#### **Step 2: Create build.yaml (one-time setup)**
+```yaml
+# build.yaml (in your project root)
+targets:
+  $default:
+    builders:
+      json_annotation_tools|safe_json_parsing:
+        enabled: true
+      json_serializable|json_serializable:
+        enabled: true
 ```
+
+#### **Step 3: Generate Code**
+```bash
+# Generate the safe parsing methods
+flutter packages pub run build_runner build
+# or
+dart run build_runner build
+```
+
+#### **Step 4: Use Enhanced Parsing & See Error Messages**
+```dart
+final problematicJson = {
+  'id': 'not-a-number', // ❌ Should be int, got String
+  'name': 'John Doe',
+  'age': 25,
+  'email': 'john@example.com',
+};
+
+try {
+  // 🚀 Use the auto-generated safe method
+  final user = UserSafeJsonParsing.fromJsonSafe(problematicJson);
+  print('Success: $user');
+} catch (e) {
+  // 🔍 Enhanced error message appears here!
+  print('Enhanced Error: $e');
+  
+  /* Output:
+  🚨 OOPS! There's a problem with your JSON data:
+  
+  🔍 EXACT PROBLEM DIAGNOSIS:
+     ❌ Field 'id' has the wrong data type
+  
+  📊 TYPE COMPARISON:
+     Expected: int (whole number)
+     Got: String (text)
+     Value: "not-a-number"
+  
+  🔧 How to fix this (3 easy options):
+  1. Fix your API to return: {"id": 123}
+  2. Update your model: final String id;
+  3. Add conversion: int.tryParse(json['id'])
+  */
+}
+```
+
+#### **🎯 Key Benefits:**
+- **🪄 Zero Manual Work**: Just add `@SafeJsonParsing()` annotation
+- **🚀 Auto-Generated**: `UserSafeJsonParsing.fromJsonSafe()` method created automatically
+- **⚡ Best Performance**: Generated code is as fast as hand-written safe parsing
+- **🔍 Enhanced Errors**: Crystal-clear error messages built into generated method
+- **🔧 Production Ready**: Perfect for error logging (Crashlytics/Sentry)
 
 ### ⚡ **Alternative: Manual Convenience Extensions**
 
@@ -222,6 +281,83 @@ try {
 
 ## 🎯 Real-World Examples
 
+### 🔍 **How to See Enhanced Error Messages**
+
+The most common question: *"I added @SafeJsonParsing(), but how do I see the enhanced error messages?"*
+
+**Answer: Use try-catch with the generated method!**
+
+```dart
+// ❌ WRONG: Using standard method (cryptic errors)
+final user = User.fromJson(problematicJson); // Type 'String' is not a subtype...
+
+// ✅ CORRECT: Using generated safe method (enhanced errors)
+try {
+  final user = UserSafeJsonParsing.fromJsonSafe(problematicJson);
+  print('Success: $user');
+} catch (e) {
+  print('📋 Full Enhanced Error:');
+  print(e.toString()); // 🔍 See complete detailed diagnosis here!
+  
+  // 🏭 In production, log this to your error service:
+  // crashlytics.recordError(e, null);
+  // logger.error('JSON parsing failed: ${e.toString()}');
+}
+```
+
+### 🚀 **Production API Service Pattern**
+
+```dart
+// Example API service using @SafeJsonParsing()
+class UserService {
+  Future<User> fetchUser(int id) async {
+    try {
+      final response = await dio.get('/api/users/$id');
+      
+      // 🚀 Use auto-generated safe method with enhanced errors
+      return UserSafeJsonParsing.fromJsonSafe(response.data);
+      
+    } catch (e) {
+      // 📝 Enhanced error messages help debug API issues 10x faster
+      logger.error('User parsing failed for ID $id: ${e.toString()}');
+      
+      // 🎯 Show user-friendly message
+      throw UserFetchException('Unable to load user data');
+    }
+  }
+}
+```
+
+### 🔧 **Advanced Field-Level Configuration**
+
+```dart
+@JsonSerializable()
+@SafeJsonParsing(
+  validateRequiredKeys: true,  // Check all keys exist first
+  methodName: 'parseProductSafe'  // Custom method name
+)
+class Product {
+  final String id;
+  
+  @SafeJsonField(
+    description: 'Product price in USD',
+    expectedFormat: 'Positive number (e.g., 19.99)',
+    commonValues: ['9.99', '19.99', '29.99'],
+  )
+  final double price;
+  
+  @JsonKey(name: 'is_available')
+  @SafeJsonField(
+    description: 'Product availability status',
+    commonValues: ['true', 'false'],
+  )
+  final bool isAvailable;
+  
+  // 🚀 AUTO-GENERATED: ProductSafeJsonParsing.parseProductSafe(json)
+  // Enhanced errors include field descriptions and common values!
+}
+```
+
 ### API Response Debugging
 ```dart
 // When your API suddenly returns unexpected data types
@@ -233,9 +369,26 @@ final apiResponse = {
 
 // Get clear, actionable error messages:
 try {
-  final user = User.fromJsonSafe(apiResponse);
+  final user = UserSafeJsonParsing.fromJsonSafe(apiResponse);
 } catch (e) {
-  // ❌ Error parsing key 'user_id': expected int, but got String. Value: "12345"
+  print(e);
+  /* Enhanced Output:
+  🚨 OOPS! There's a problem with your JSON data:
+  
+  🔍 EXACT PROBLEM DIAGNOSIS:
+     ❌ Field 'user_id' has the wrong data type
+  
+  📊 TYPE COMPARISON:
+     Expected: int (whole number)
+     Got: String (text)
+     Value: "12345"
+     
+  🔧 How to fix this (copy-paste ready):
+  1. Fix your API to return: {"user_id": 12345}
+  2. Update your model: final String user_id;
+  3. Add conversion: int.tryParse(json['user_id'])
+  */
+  
   // Now you can immediately contact the backend team with specific details!
 }
 ```
