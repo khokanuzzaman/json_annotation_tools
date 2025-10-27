@@ -44,6 +44,7 @@ User.fromJsonSafe(json);
 - **🚫 Missing Field Detection**: Clear warnings for missing required fields
 - **🔄 Seamless Integration**: Works perfectly with `json_annotation` and `json_serializable`
 - **⚡ Zero Performance Impact**: Only active during parsing errors
+- **🌍 Cross-Platform**: Works on iOS, Android, Web, macOS, Windows, Linux
 
 ## 📱 Interactive Demo App
 
@@ -258,6 +259,47 @@ Perfect integration with Dio, Retrofit, and json_annotation - use the same safe 
 - **Same memory usage** as standard parsing
 - **Compatible** with all existing JSON serialization patterns
 
+## 🌍 Platform Support
+
+This package works seamlessly across all Flutter/Dart platforms:
+
+### ✅ **Fully Supported Platforms:**
+- **📱 iOS**: Native iOS apps (iPhone/iPad)
+- **🤖 Android**: Native Android apps (phones/tablets)  
+- **🌐 Web**: Progressive Web Apps (PWA) and web browsers
+- **💻 macOS**: Native desktop apps
+- **🪟 Windows**: Native desktop apps
+- **🐧 Linux**: Native desktop apps
+
+### 📦 **Package Type:**
+- **Pure Dart package** - no platform-specific code
+- **No native dependencies** - works everywhere Flutter works
+- **Same API** across all platforms
+- **Consistent behavior** regardless of target platform
+
+### 🎮 **Try the Demo:**
+Run our interactive example app to test on your preferred platform:
+
+```bash
+# iOS (requires Xcode and iOS Simulator/Device)
+cd example_app && flutter run -d ios
+
+# Android (requires Android SDK and Emulator/Device)  
+cd example_app && flutter run -d android
+
+# Web (opens in default browser)
+cd example_app && flutter run -d chrome
+
+# macOS (requires macOS development setup)
+cd example_app && flutter run -d macos
+
+# Windows (requires Windows development setup)
+cd example_app && flutter run -d windows
+
+# Linux (requires Linux development setup)
+cd example_app && flutter run -d linux
+```
+
 ## 🐛 Troubleshooting
 
 ### Common Issues
@@ -283,7 +325,31 @@ factory User.fromJsonSafe(Map<String, dynamic> json) { /* Your safe implementati
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+We welcome contributions! Here's how to get involved:
+
+### 🐛 **Report Issues:**
+Found a bug or have a feature request? 
+- **Create an issue**: https://github.com/khokanuzzaman/json_annotation_tools/issues
+- **Include details**: Error messages, code examples, expected vs actual behavior
+
+### 💡 **Contribute Code:**
+1. **Fork** the repository: https://github.com/khokanuzzaman/json_annotation_tools
+2. **Create** a feature branch: `git checkout -b feature/amazing-feature`
+3. **Commit** your changes: `git commit -m 'Add amazing feature'`
+4. **Push** to branch: `git push origin feature/amazing-feature`
+5. **Open** a Pull Request
+
+### 📖 **Improve Documentation:**
+- Fix typos or unclear explanations
+- Add more examples or use cases
+- Enhance visual documentation
+
+### 🧪 **Add Tests:**
+- Write tests for new features
+- Improve existing test coverage
+- Add edge case testing
+
+Please see our [Contributing Guide](CONTRIBUTING.md) for detailed guidelines.
 
 ## 📄 License
 

@@ -1,9 +1,9 @@
 name: json_annotation_tools
 description: "Transform cryptic JSON parsing errors into crystal-clear, actionable error messages. Debug JSON issues in seconds, not hours. Perfect companion to json_annotation and json_serializable."
-version: 0.0.1
-homepage: https://github.com/yourusername/json_annotation_tools
-repository: https://github.com/yourusername/json_annotation_tools
-issue_tracker: https://github.com/yourusername/json_annotation_tools/issues
+version: 0.0.2
+homepage: https://github.com/khokanuzzaman/json_annotation_tools
+repository: https://github.com/khokanuzzaman/json_annotation_tools
+issue_tracker: https://github.com/khokanuzzaman/json_annotation_tools/issues
 
 environment:
   sdk: ^3.7.2
