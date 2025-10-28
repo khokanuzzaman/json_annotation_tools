@@ -100,6 +100,19 @@ dev_dependencies:
 
 Just add **one annotation** and get automatic safe parsing with enhanced error messages! ✨
 
+#### **Step 0: Bootstrap with the CLI (recommended)**
+```bash
+# Adds @SafeJsonParsing() and part 'model.safe_json_parsing.g.dart';
+dart run json_annotation_tools init
+
+# Preview without writing changes
+dart run json_annotation_tools init --dry-run
+```
+
+This scans your `lib/` folder for `@JsonSerializable` models, inserts the missing
+`@SafeJsonParsing()` annotation, and ensures the extra `part` directive is present
+so you can jump straight to code generation.
+
 #### **Step 1: Annotate Your Model**
 ```dart
 import 'package:json_annotation/json_annotation.dart';
@@ -181,6 +194,22 @@ try {
   */
 }
 ```
+
+#### Want zero call-site changes?
+
+Create a single helper or service wrapper that always funnels through the generated safe method:
+
+```dart
+class UserParser {
+  static User parse(Map<String, dynamic> json) =>
+      UserSafeJsonParsing.fromJsonSafe(json);
+}
+
+// Use everywhere else
+final user = UserParser.parse(apiResponse);
+```
+
+This keeps your UI/business layers unchanged while guaranteeing enhanced diagnostics.
 
 #### **🎯 Key Benefits:**
 - **🪄 Zero Manual Work**: Just add `@SafeJsonParsing()` annotation
@@ -278,6 +307,21 @@ try {
   // Now you know exactly what to fix!
 }
 ```
+
+## 🧰 Command-Line Setup Assistant
+
+Make onboarding effortless with the bundled CLI:
+
+```bash
+dart run json_annotation_tools init
+```
+
+- **Annotates automatically** – adds `@SafeJsonParsing()` next to every `@JsonSerializable` model.
+- **Fixes missing part files** – ensures `part 'model.safe_json_parsing.g.dart';` is present.
+- **Dry-run friendly** – append `--dry-run` to preview the diff.
+- **Verbose mode** – use `--verbose` to list already compliant files.
+
+💡 Tip: add this to a pre-commit hook or CI check so new models always ship with safe parsing baked in.
 
 ## 🎯 Real-World Examples
 
@@ -559,6 +603,9 @@ cd example_app && flutter run -d windows
 
 # Linux (requires Linux development setup)
 cd example_app && flutter run -d linux
+
+# Generate a static web build ready for hosting (Netlify/GitHub Pages/etc.)
+cd example_app && flutter build web --release
 ```
 
 ## 🐛 Troubleshooting

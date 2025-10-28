@@ -1,5 +1,15 @@
 # 🚀 Production Setup Guide for @SafeJsonParsing()
 
+## ⚙️ Step 0: Bootstrap (optional but recommended)
+
+```bash
+# Adds @SafeJsonParsing() + part directives wherever @JsonSerializable is found
+dart run json_annotation_tools init
+
+# Preview without touching files
+dart run json_annotation_tools init --dry-run
+```
+
 ## 📦 Step 1: Dependencies
 
 Add to your `pubspec.yaml`:
@@ -102,7 +112,7 @@ class ApiService {
     try {
       final response = await dio.get('/users/$id');
       
-      // 🎯 Use auto-generated safe method!
+      // 🎯 Use auto-generated safe method (extension keeps generated logic isolated)
       return UserSafeJsonParsing.fromJsonSafe(response.data);
       
     } catch (e) {
