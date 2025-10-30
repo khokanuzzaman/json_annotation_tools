@@ -580,6 +580,34 @@ try {
 }
 ```
 
+### 🪄 Riverpod integration
+
+If you’re using Riverpod, wrap the async work with `AsyncValue.guard` (or your own helper) and convert `FormatException` into an app-friendly error.  
+
+```dart
+final doctorSummaryProvider = FutureProvider.autoDispose((ref) async {
+  final repository = ref.watch(summaryRepositoryProvider);
+
+  return AsyncValue.guard(() async {
+    final json = await repository.fetchSummaryJson();
+    return DoctorSummarySafeJsonParsing.fromJsonSafe(json);
+  }).when(
+    data: (value) => value,
+    error: (error, stack) {
+      if (error is FormatException) {
+        // Surface the enhanced message in your UI/logs
+        ref.read(loggerProvider).warn(error.message);
+        throw JsonParseFailure(error.message);
+      }
+      throw error;
+    },
+    loading: () => const AsyncLoading(),
+  );
+});
+```
+
+You’ll get Riverpod’s normal `AsyncError` states while still benefiting from the detailed parsing message.
+
 ## 🧪 Testing & Debugging
 
 - `flutter test test/safe_json_parsing_test.dart` – regression test that asserts on the enhanced message.

@@ -55,6 +55,8 @@ Prints a full diagnostic when JSON types mismatch.
 - Keep existing `fromJson` methods for compatibility.
 - Call `fromJsonSafe` in tests or high-risk flows to catch issues early.
 - Catch `FormatException` once near the API layer; log or surface it however your app prefers.
+- For Riverpod, wrap the async call in `AsyncValue.guard` (or a custom helper) and map
+  `FormatException` to an app-specific error so your UI still receives a clean `AsyncError`.
 
 ## 8. Maintenance
 - Re-run `build_runner` after changing models.
