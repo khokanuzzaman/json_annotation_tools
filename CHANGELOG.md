@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.1.7] - 2025-03-01
+
+### 📚 Documentation & Examples
+- Added a full Riverpod integration example in the README showing how to surface
+  `FormatException` messages end-to-end.
+- Clarified the usage steps for safe parsing within providers and widgets.
+
+### 🔧 Maintenance
+- Bumped dependency snippets in README/USAGE_GUIDE to reference version `^0.1.7`.
+
 ## [0.1.6] - 2025-02-15
 
 ### ✨ Generator Improvements

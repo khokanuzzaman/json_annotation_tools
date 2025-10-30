@@ -86,7 +86,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  json_annotation_tools: ^0.1.6  # 🚀 Latest version!
+  json_annotation_tools: ^0.1.7  # 🚀 Latest version!
   json_annotation: ^4.9.0
 
 dev_dependencies:

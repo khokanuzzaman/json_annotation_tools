@@ -4,7 +4,7 @@
 
 ```yaml
 dependencies:
-  json_annotation_tools: ^0.1.6
+  json_annotation_tools: ^0.1.7
   json_annotation: ^4.9.0
 
 dev_dependencies:
