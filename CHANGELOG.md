@@ -7,13 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### 🚀 Tooling Upgrades
-- **NEW CLI**: `dart run json_annotation_tools init` auto-injects `@SafeJsonParsing()` and required part directives.
-- **Dry-run support**: Preview model updates without touching files; perfect for CI.
+_Nothing yet._
+
+## [0.1.6] - 2025-02-15
+
+### ✨ Generator Improvements
+- Respect positional constructors and avoid instantiating abstract classes when emitting `fromJsonSafe`, eliminating runtime crashes on complex DTOs.
+- Enhance enum, nullable, and nested-object handling so generated parsers line up with real model signatures.
+
+### 📚 Documentation & DX
+- Expanded README with CLI cheat sheet, error-handling guidance, and testing tips.
+- Added `USAGE_GUIDE.md` for quick onboarding, plus a `tool/demo_safe_json_error.dart` script for demonstrating enhanced errors.
+- Updated dependency snippets to reference `^0.1.6`.
 
 ### ✅ Quality
-- **Regression tests**: Coverage for the init workflow to avoid future breakage.
-- **Documentation**: README now highlights the CLI workflow and web build publishing steps.
+- `flutter test` passes across the package and example ensuring generator changes stay solid.
+
+## [0.1.5] - 2024-12-18
+
+### 🚀 Tooling Upgrades
+- Introduced the `json_annotation_tools init` CLI command to auto-inject `@SafeJsonParsing()` and matching part directives across existing models.
+- Added dry-run support so teams can preview the generated changes before applying them in CI or pre-commit hooks.
+
+### ✅ Quality
+- Added regression coverage around the CLI so future enhancements don’t break the initialization workflow.
+- Refreshed the README with the CLI-first quick start and guidance for publishing the Flutter example app.
 
 ## [0.1.4] - 2024-10-27
 

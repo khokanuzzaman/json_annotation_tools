@@ -1,6 +1,6 @@
 name: json_annotation_tools
 description: "Transform cryptic JSON parsing errors into crystal-clear, actionable error messages. Perfect companion to json_annotation."
-version: 0.1.5
+version: 0.1.6
 homepage: https://github.com/khokanuzzaman/json_annotation_tools
 repository: https://github.com/khokanuzzaman/json_annotation_tools
 issue_tracker: https://github.com/khokanuzzaman/json_annotation_tools/issues

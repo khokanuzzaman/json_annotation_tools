@@ -86,7 +86,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  json_annotation_tools: ^0.1.5  # 🚀 Latest version!
+  json_annotation_tools: ^0.1.6  # 🚀 Latest version!
   json_annotation: ^4.9.0
 
 dev_dependencies:
@@ -547,6 +547,45 @@ class Product {
   // 🚀 AUTO-GENERATED: Product.parseJsonSafe(json) with enhanced errors!
 }
 ```
+
+## 📟 CLI Command Cheat Sheet
+
+```bash
+# Auto-annotate @JsonSerializable models with @SafeJsonParsing()
+flutter pub run json_annotation_tools init
+
+# Preview changes without writing them
+flutter pub run json_annotation_tools init --dry-run
+
+# Regenerate JSON + safe parsing code
+flutter pub run build_runner build --delete-conflicting-outputs
+
+# Optional helper to demo the enhanced error output
+dart run tool/demo_safe_json_error.dart
+```
+
+## 🔧 Handling Errors
+
+- Prefer the generated `ModelSafeJsonParsing.fromJsonSafe(json)` whenever you deserialize API data.
+- Catch `FormatException` at the repository/data-source layer and log or remap it once.
+- Fall back to manual helpers like `json.getSafeInt('field')` when a model cannot be annotated.
+- Use `@SafeJsonConfig` if you need global interception/logging without touching each call site.
+
+```dart
+try {
+  final summary = DoctorSummarySafeJsonParsing.fromJsonSafe(payload);
+} on FormatException catch (error) {
+  logger.error('JSON mismatch: ${error.message}');
+  throw DataParseFailure.fromServer(error.message);
+}
+```
+
+## 🧪 Testing & Debugging
+
+- `flutter test test/safe_json_parsing_test.dart` – regression test that asserts on the enhanced message.
+- `dart run tool/demo_safe_json_error.dart` – prints the full diagnostic for a controlled payload.
+- `rg "SafeJsonParsing" -g"*.g.dart"` – quick audit to check which models already have safe parsers.
+- Consider golden tests around high-value endpoints to lock in the detailed error copy.
 
 ## 🤝 Migration Guide
 
