@@ -629,6 +629,79 @@ state.when(
 );
 ```
 
+### 📁 Complete Riverpod example
+
+```dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:json_annotation/json_annotation.dart';
+import 'package:json_annotation_tools/json_annotation_tools.dart';
+
+part 'product.g.dart';
+part 'product.safe_json_parsing.g.dart';
+
+@JsonSerializable()
+@SafeJsonParsing()
+class Product {
+  Product({required this.id, required this.name, required this.price});
+
+  final int id;
+  final String name;
+  final double price;
+
+  factory Product.fromJson(Map<String, dynamic> json) =>
+      ProductSafeJsonParsing.fromJsonSafe(json);
+}
+
+final productRepositoryProvider = Provider<ProductRepository>((ref) {
+  return ProductRepository();
+});
+
+class ProductRepository {
+  Future<Map<String, dynamic>> fetchProductJson() async {
+    return {
+      'id': 1,
+      'name': 'Riverpod Coffee Mug',
+      'price': '19.99', // wrong type on purpose
+    };
+  }
+}
+
+final productProvider = FutureProvider.autoDispose<Product>((ref) async {
+  final repo = ref.watch(productRepositoryProvider);
+
+  return AsyncValue.guard(() async {
+    final json = await repo.fetchProductJson();
+    return Product.fromJson(json);
+  }).when(
+    data: (value) => value,
+    error: (error, stackTrace) {
+      if (error is FormatException) {
+        ref.read(loggerProvider).call(error.message);
+        rethrow;
+      }
+      throw error;
+    },
+    loading: () => throw StateError('unexpected loading state'),
+  );
+});
+
+final loggerProvider = Provider<void Function(String)>((ref) {
+  return (message) => print('LOG: $message');
+});
+
+void main() async {
+  final container = ProviderContainer();
+  try {
+    await container.read(productProvider.future);
+  } on FormatException catch (e) {
+    print('Enhanced error: ${e.message}');
+  }
+}
+```
+
+Add `flutter_riverpod` to your pubspec (and run build_runner to generate the
+part files) before running this snippet.
+
 ## 🧪 Testing & Debugging
 
 - `flutter test test/safe_json_parsing_test.dart` – regression test that asserts on the enhanced message.
