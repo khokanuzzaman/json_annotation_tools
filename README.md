@@ -606,7 +606,28 @@ final doctorSummaryProvider = FutureProvider.autoDispose((ref) async {
 });
 ```
 
-You’ll get Riverpod’s normal `AsyncError` states while still benefiting from the detailed parsing message.
+You’ll get Riverpod’s normal `AsyncError` states while still benefiting from the detailed parsing message. If you want to render the detailed error in a widget (for example in a team list screen):
+
+```dart
+state.when(
+  loading: () => const CircularProgressIndicator(),
+  error: (error, _) {
+    final message = error is FormatException
+        ? error.message
+        : (error.toString().isEmpty ? 'No data available!' : error.toString());
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          message,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  },
+  data: (teamMembers) => ...,
+);
+```
 
 ## 🧪 Testing & Debugging
 
